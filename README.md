@@ -1,0 +1,1 @@
+There are some algorithms for interviews.
