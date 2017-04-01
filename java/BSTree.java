@@ -1,5 +1,6 @@
 import java.util.Stack;
-
+import java.util.Queue;
+import java.util.ArrayDeque;
 
 class Node<T extends Comparable<T>>{
     private T value;
@@ -38,7 +39,9 @@ class Node<T extends Comparable<T>>{
     }
 
 }
-
+/*
+二元查找树，左节点的值 《 根的值 《 右节点的值
+ */
 public class BSTree<T extends Comparable<T>>{
     private Node<T> root;
     public BSTree(){
@@ -159,16 +162,107 @@ public class BSTree<T extends Comparable<T>>{
         }
     }
 
+    public void breadthFirst(){
+        //广度优先
+        breadthFirst(root);
+    }
+
+     public void breadthFirst( Node<T> node){
+        if( node == null)
+            return;
+        Queue<Node<T>> queue = new ArrayDeque<Node<T>>();
+        queue.offer(node);
+        while( !queue.isEmpty() ){
+            Node<T> temp = queue.poll();
+            System.out.println(temp.getValue());
+            if(temp.getLeft() != null)
+                queue.offer( temp.getLeft());
+            if(temp.getRight() != null)
+                queue.offer( temp.getRight());
+        }
+     }
+//把二元查找树转变成排序的双向链表
+//中序遍历，然后到当前节点时，默认之前的已经排好序，当前节点只用指向链表的尾部就行
+    private  Node<T> listHeader;
+    private  Node<T> listIndex;
+
+     public void inOrderConvert(){
+        inOrderConvert(root);
+    }
+    
+    public void inOrderConvert(Node<T> node){
+        if( node == null){
+            return;
+        }
+        inOrderConvert(node.getLeft());
+        convert(node);
+        inOrderConvert(node.getRight());
+    }
+
+    public  void convert(Node<T> node){
+        node.setLeft(listIndex);
+        if(listIndex != null){
+            listIndex.setRight(node);
+        }
+        else{
+            listHeader = node;
+        }
+        listIndex = node;
+    }
+
+    public void printLink(){
+        Node<T> pNode = listHeader;
+        while(pNode != null){
+            System.out.println( pNode.getValue());
+            pNode = pNode.getRight();
+        }
+    }
+/*
+在二元树中找出和为某一值的所有路径，从树的根结点开始往下访问一直到叶结点所经过的所有结点形成一条路径
+ */
+    public void getPath(Node<T> node, int sum, Stack<Node<T>> stack, int currentSum ){
+
+        if( node == null )
+            return;
+        stack.push(node);
+        currentSum += (Integer)node.getValue();
+        if( node.getRight() == null && node.getLeft() == null){
+            if( currentSum == sum){
+                //print stack
+                while( !stack.isEmpty() ){
+                    Node<T> temp = stack.pop();
+                    System.out.println(temp.getValue());
+                }
+            }
+            else{
+                stack.pop();//当前是叶子节点，但是sum不等，要删除叶子节点，回到父节点
+                currentSum -= (Integer)node.getValue();
+            }
+        }
+
+        getPath( node.getLeft(), sum, stack, currentSum);
+        getPath( node.getRight(), sum, stack, currentSum);
+        
+    }
+
+    public void findPath(int sum){
+        Stack<Node<T>> stack = new Stack<Node<T>>();
+        getPath(root, sum, stack,0);
+    }
+
     public static void main(String[] args){
         BSTree<Integer> tree = new BSTree<Integer>();
-        int[] keys = new int[]{7,5,6,2};
+        int[] keys = new int[]{7,5,6,2,8};
         for(int key: keys){
             //System.out.println("key is :" + key);
             tree.add(key);
             //System.out.println( "root is:" + tree.getRoot());
         }
         System.out.println( "pre order:");
-        tree.postOrderTraverse();
+       //tree.inOrderConvert();
+        //tree.printLink();
         //tree.inOrderTraverse();
+       
+        tree.breadthFirst();
     }
 }
