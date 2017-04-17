@@ -17,6 +17,7 @@ def quicksort( list, left, right):
         while i < j and list[i] <= flag:
             i = i+1
         list[j] = list[i]
+        
     list[i] = flag
 
     quicksort(list, left, i-1)

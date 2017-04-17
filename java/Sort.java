@@ -2,7 +2,8 @@
 some sort methods.
  */
 public class Sort{
-    //选择排序
+    //选择排序:每一趟从待排序的数据元素中选出最小（或最大）的一个元素
+    //顺序放在已排好序的数列的最后，直到全部待排序的数据元素排完
     public void selectSort(int[] a){
         if( a == null || a.length == 0){
             return;
@@ -44,12 +45,39 @@ public class Sort{
     }
     //归并排序
     //快速排序
+    public void quickSort(int[] a){
+        if( a == null || a.length <= 1){
+            return;
+        }
+        quick(a, 0, a.length-1);
+
+    }
+    public void quick(int[] a, int left, int right){
+        if( left >= right )
+            return;
+        int flag = a[left];
+        int l = left;
+        int r = right;
+        while( l<r ){
+            
+            while( l < r && a[r] >= flag)
+                r--;
+            a[l] = a[r];
+            while( l < r && a[l] <= flag)
+                l++;
+            a[r] = a[l];
+        }
+        a[l] = flag;
+
+        quick(a, left, l-1);
+        quick(a, l+1, right);
+    }
     //二分查找
     public static void main(String[] args) {
         int[] a = new int[]{6,9,5,8,1,4,2};
 
         Sort s = new Sort();
-        s.buddleSort(a);
+        s.quickSort(a);
         for(int i:a){
             System.out.println(i);
         }
