@@ -174,7 +174,7 @@ def str2int(str):
     """
     import re
     import sys
-    if re.match("^\-{0,1}\d+\.{0,1}\d+$", str) is  None:
+    if re.match("^\[-+]{0,1}\d+(\.{0,1}\d+)?$", str) is  None:
         print "the input string is not number."
         return None
 

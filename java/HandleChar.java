@@ -137,7 +137,7 @@ public class HandleChar{
                 break;
             if( str.charAt(i) == str.charAt(i+2)){
                 str = str.replaceAll(str.substring(i,i+3),"");
-                i = -1;
+                i = -1;//删除xyx子串后，一定要从头再开始查找
             }
         }
         return str;
@@ -216,24 +216,94 @@ public class HandleChar{
         return key;
     }
 
+    public int getOneCount(int num){
+        /*
+        数字的二进制中数字1的个数
+         */
+        int count = 0;
+        while( num != 0){
+            if( (num & 1) == 1)
+                count++;
+            num =( num>>1);
+        }
+        return count;
+    }
+
+    public int getOneCount2(int num){
+        int count = 0;
+        for(; num != 0; count++)
+            num  &= num-1;
+        return count;
+    }
+
+    public int maxChar(char[] a, char[] b){
+        /*
+        求最大前缀，字符串A：accdefcdfg,字符串B：cdfgab，在B中，c，cd，cdf，cdfg...都可以称为是B的前缀，现在在A中寻找B的最大前缀，打印最大前缀并返回最大前缀的位置。比如，B在A中的前缀有，c，cd，cdfg，最大前缀是cdfg，打印出cdfg返回7
+         */
+        if( a == null || b == null )
+            return -1;
+        int i = 0;
+        int j = 0;
+        int index = 0;
+        int maxIndex = 0;
+        int maxLength = 0;
+        while( i<a.length ){
+            index = i;
+            while( i < a.length && j < b.length && a[i] == b[j]){
+                i++;
+                j++;
+            }
+            
+            if( maxLength < j ){
+                maxLength = j;
+                maxIndex = i - j +1;
+                //System.out.printf("the i=%d,maxIndex=%d",i, maxIndex);
+            }
+            j = 0;
+            i = index +1;
+        }
+        StringBuilder result = new StringBuilder();
+        for(i=0;i<maxLength;i++)
+            result.append(b[i]);
+        System.out.println(result);
+        System.out.println(maxIndex);
+        return maxIndex;
+    }
+
+    public int minNum(int[] a){
+        /*
+        把一个数组最开始的若干个元素搬到数组的末尾，称之为数组的旋转。输入一个递增排序的数组的一个排序，输出旋转数组的最小元素。例如：[3, 4, 5, 1, 2]为[1, 2, 3, 4, 5]的一个旋转，输出最小的数字1.
+        二分查找
+        test case:[],[1],[1,2],[2,1],[1,2,3],[2,3,1],[3,1,2]
+         */
+        if( a == null || a.length == 0){
+            return -1;
+        }
+        int low = 0;
+        int high = a.length-1;
+        int min = a[low];
+        int mid = 0;
+        while( low < high ){
+            mid = (low + high)/2;
+            if( a[mid] > min){
+                low = mid+1;
+            }
+            else{
+                high = mid;
+                min = a[mid];
+            }
+        }
+        return min;
+    }
+
     public static void main(String[] args){
         HandleChar h = new HandleChar();
         //{},{1},{1,2},{1,1},{1,2,3},{1,2,2},{2,2,1}{2,1,2},{1,1,2,2},{1,2,1,1,2,3}
-        int[] a = new int[] {1 };
-        int[] b = new int[] {  1,2 };
-        int[] c= new int[] { };
-        int[] d = new int[] { 1,1 };
-        int[] e= new int[] { 1,2,3 };
-        int[] f = new int[] {  1,2,2 };
-        int[] j = new int[] {  2,2,1 };
-        int[] k = new int[] {  1,2,2,1 };
-        System.out.println(h.getAppearNumOnce(a));
-        System.out.println(h.getAppearNumOnce(b));
-        System.out.println(h.getAppearNumOnce(c));
-        System.out.println(h.getAppearNumOnce(d));
-        System.out.println(h.getAppearNumOnce(e));
-        System.out.println(h.getAppearNumOnce(f));
-        System.out.println(h.getAppearNumOnce(j));
-        System.out.println(h.getAppearNumOnce(k));
+        int[] a = new int[]{3,4,5,1,2};
+        int[] b = new int[]{1,2,3,4,5,6};
+        int[] c = new int[]{5,1,2,3,4};
+        System.out.println(h.minNum(a));
+        System.out.println(h.minNum(b));
+        System.out.println(h.minNum(c));
     }
 }
