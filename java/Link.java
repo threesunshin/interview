@@ -1,59 +1,64 @@
 /*
-链表相关
+链表相关, 有头结点
  */
 public class Link{
     Node head;
     int size;
-    public Link(int value){
-        this.head = new Node(value);
-        this.size = 1;
-    }
-
+    Node current;
     public Link(){
-        this.head = null;
+        this.head = new Node(null);
+        this.current = this.head;
         this.size = 0;
     }
 
-    public void add(int value){
-        if( head == null){
-            head = new Node(value);
-            size = 1;
+    public void index(int index) throws Exception{
+        /*
+        定位到要操作元素那里
+         */ 
+        if( index < -1 || index > size){
+            throw new Exception("wrong index.");
         }
-        else{
-            Node node = head;
-            while( node.getNextNode() != null){
-                node = node.getNextNode();
-            }
-            node.setNextNode( new Node(value) );
-            size += 1;
+        if( index == -1)
+            return; // 在头结点之后操作，第一个元素下标是0，head下标就是-1
+        current = head.getNextNode();
+        while( current != null && index > 0){
+            current = current.getNextNode();
+            index--;
         }
-        
     }
+
+    public void delete(int index) throws Exception{
+        if( isEmpty()){
+            throw new Exception("link is empty, cannot delete.");
+        }
+        if( index < 0 || size < index)
+            throw new Exception("wrong index.");
+        index(index-1);
+        current.setNextNode(current.getNextNode().getNextNode());
+        size--;
+    }
+
     public int getSize(){
         return size;
     }
 
-    public void insert(Node node, int index){
-        if( head == null || size < index){
-            System.out.println("the link length less than index.");
-            return;
+    public boolean isEmpty(){
+        return size==0?true:false;
+    }
+
+    public void insert(int value, int index) throws Exception{
+        if( index <  0 || size < index){
+            throw new Exception("wrong index.");
         }
-        Node pre = head;
-        Node next = head;
-        while( index > 0 && next != null){
-            pre = next;
-            next = next.getNextNode();
-            index--;
-        }
-        pre.setNextNode(node);
-        node.setNextNode(next);
-        size += 1;
+        index(index-1);
+        current.setNextNode(new Node(value, current.getNextNode()));
+        size++;
     }
     public void reverse(){
         /*
         单向链表反转
          */
-        if( head == null || size == 1)
+        if( size == 1)
             return;
         Node pre = head;
         Node cur = pre.getNextNode();
@@ -70,7 +75,7 @@ public class Link{
         /*
         判断链表是否有环
          */
-        if( head == null || size < 2)
+        if( size < 2)
             return false;
         Node slow = head;
         Node fast = head;
@@ -85,24 +90,29 @@ public class Link{
     }
 
     public void printLink(){
-        Node node = head;
+        
+        if( isEmpty() )
+            return;
+        Node node = head.getNextNode();
         while( node != null){
             System.out.println(node.getValue());
             node = node.getNextNode();
         }
     }
 
-    public static void main(String[] args){
-        Link link = new Link(2);
-        link.add(4);
-        link.add(6);
-        Node node1 = new Node(3);
-        link.insert(node1,1);
+    public static void main(String[] args) throws Exception{
+        Link link = new Link();
+        link.insert(1,0);
+        link.insert(2,1);
+
+        //Node node1 = new Node(3);
+        link.insert(3,2);
         //Node node2 = new Node(5);
         //link.insert(node2,3);
         link.printLink();
         //System.out.println(link.isCircle());
-        link.reverse();
+        //link.reverse();
+        link.delete(1);
         link.printLink();
         //System.out.println(link.getSize());
     }
@@ -113,6 +123,10 @@ class Node{
 
     public Node(int value){
         this(value,null);
+    }
+
+    public Node(Node next){
+        this.next = next;
     }
     public Node(int value, Node next){
         this.value = value;

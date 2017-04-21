@@ -5,6 +5,8 @@ import java.util.regex.*;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.io.FileReader;
+import java.io.BufferedReader;
 
 public class HandleChar{
     
@@ -296,14 +298,38 @@ public class HandleChar{
         return min;
     }
 
-    public static void main(String[] args){
+    public void wordCount(String filename) throws Exception{
+        /*
+        统计文件中单词出现的次数
+         */
+        if( filename == null || filename == "")
+            throw new Exception("wrong parameters.");
+        try{
+            BufferedReader read = new BufferedReader(new FileReader(filename));
+            Map<String,Integer> map = new HashMap<String, Integer>();
+            String line = read.readLine();
+            while(line != null){
+                String[] words = line.split("\\W+");
+                for(String word:words){
+                    if( map.containsKey(word)){
+                        map.put(word,map.get(word)+1);
+                    }
+                    else
+                        map.put(word,1);
+                }
+                line = read.readLine();
+            }
+            for(Map.Entry entry:map.entrySet()){
+                System.out.println(entry.getKey()+":"+entry.getValue());
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
         HandleChar h = new HandleChar();
         //{},{1},{1,2},{1,1},{1,2,3},{1,2,2},{2,2,1}{2,1,2},{1,1,2,2},{1,2,1,1,2,3}
-        int[] a = new int[]{3,4,5,1,2};
-        int[] b = new int[]{1,2,3,4,5,6};
-        int[] c = new int[]{5,1,2,3,4};
-        System.out.println(h.minNum(a));
-        System.out.println(h.minNum(b));
-        System.out.println(h.minNum(c));
+        h.wordCount("1.txt");
     }
 }
