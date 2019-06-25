@@ -2,11 +2,11 @@
 链表相关, 有头结点
  */
 public class Link{
-    Node head;
+    LinkNode head;
     int size;
-    Node current;
+    LinkNode current;
     public Link(){
-        this.head = new Node(null);
+        this.head = new LinkNode(null);
         this.current = this.head;
         this.size = 0;
     }
@@ -51,7 +51,7 @@ public class Link{
             throw new Exception("wrong index.");
         }
         index(index-1);
-        current.setNextNode(new Node(value, current.getNextNode()));
+        current.setNextNode(new LinkNode(value, current.getNextNode()));
         size++;
     }
     public void reverse(){
@@ -60,11 +60,11 @@ public class Link{
          */
         if( size == 1)
             return;
-        Node pre = head;
-        Node cur = pre.getNextNode();
+        LinkNode pre = head;
+        LinkNode cur = pre.getNextNode();
         pre.setNextNode(null);
         while( cur != null){
-            Node tmp = cur.getNextNode();
+            LinkNode tmp = cur.getNextNode();
             cur.setNextNode(pre);
             pre = cur;
             cur = tmp;
@@ -77,8 +77,8 @@ public class Link{
          */
         if( size < 2)
             return false;
-        Node slow = head;
-        Node fast = head;
+        LinkNode slow = head;
+        LinkNode fast = head;
         while( slow != null && fast != null){
             slow = slow.getNextNode();
             fast = fast.getNextNode().getNextNode();
@@ -93,10 +93,10 @@ public class Link{
         
         if( isEmpty() )
             return;
-        Node node = head.getNextNode();
-        while( node != null){
-            System.out.println(node.getValue());
-            node = node.getNextNode();
+        LinkNode LinkNode = head.getNextNode();
+        while( LinkNode != null){
+            System.out.println(LinkNode.getValue());
+            LinkNode = LinkNode.getNextNode();
         }
     }
 
@@ -105,9 +105,9 @@ public class Link{
         link.insert(1,0);
         link.insert(2,1);
 
-        //Node node1 = new Node(3);
+        //LinkNode node1 = new LinkNode(3);
         link.insert(3,2);
-        //Node node2 = new Node(5);
+        //LinkNode node2 = new LinkNode(5);
         //link.insert(node2,3);
         link.printLink();
         //System.out.println(link.isCircle());
@@ -117,28 +117,28 @@ public class Link{
         //System.out.println(link.getSize());
     }
 }
-class Node{
+class LinkNode{
     private int value;
-    private Node next;
+    private LinkNode next;
 
-    public Node(int value){
+    public LinkNode(int value){
         this(value,null);
     }
 
-    public Node(Node next){
+    public LinkNode(LinkNode next){
         this.next = next;
     }
-    public Node(int value, Node next){
+    public LinkNode(int value, LinkNode next){
         this.value = value;
         this.next = next;
     }
 
-    public Node getNextNode(){
+    public LinkNode getNextNode(){
         return this.next;
     }
 
-    public void setNextNode(Node node){
-        this.next = node;
+    public void setNextNode(LinkNode LinkNode){
+        this.next = LinkNode;
     }
 
     public int getValue(){

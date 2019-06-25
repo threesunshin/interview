@@ -44,7 +44,8 @@ public class Sort{
         }
     }
     //归并排序
-    //快速排序
+
+    //快速排序 时间复杂度O(nlogn)
     public void quickSort(int[] a){
         if( a == null || a.length <= 1){
             return;
@@ -72,7 +73,25 @@ public class Sort{
         quick(a, left, l-1);
         quick(a, l+1, right);
     }
-    //二分查找
+
+    //快速选择，利用快排实现，解决 kth element问题，top k element问题
+    /*
+    215. Kth Largest Element in an Array (Medium)
+
+    题目描述：找到第 k 大的元素。
+    解题思路：1.用快排，然后取第k个，时间复杂度 O(nlogn)
+    2.
+     */
+
+
+    //堆排序
+    public void heapSort(int[] a){
+
+    }
+
+    //桶排序
+
+
     public static void main(String[] args) {
         int[] a = new int[]{6,9,5,8,1,4,2};
 
